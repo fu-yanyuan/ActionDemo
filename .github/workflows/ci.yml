@@ -12,5 +12,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: '1.19'
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - run: go test
+      - name: Format
+        run: gofmt -l -w .
+      - name: Test 
+        run: go test -v
