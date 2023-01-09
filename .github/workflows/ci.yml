@@ -1,4 +1,5 @@
-name: Go
+name: github actions
+run-name: ${{ github.actor }} is testing out GitHub Actions for siwe api 🚀
 on: [push, pull_request]
 
 jobs:
@@ -10,4 +11,5 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: '1.16.x'
+          go-version: '1.19'
+      - run: echo "🍏 This job's status is ${{ job.status }}."
