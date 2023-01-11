@@ -25,12 +25,9 @@ func nonce(c *gin.Context) {
 	session := sessions.Default(c)
 
 	session.Set("nonce", siwe.GenerateNonce())
-	if err := session.Save(); err != nil {
-		errInfo := errorResp{Code: 123, Message: err.Error()}
-		c.JSON(422, gin.H{
-			"error": errInfo,
-		})
-		return
+	err := session.Save()
+	if err != nil {
+		panic(err)
 	}
 
 	nonce := nonceResp{session.Get("nonce").(string)}
@@ -41,14 +38,14 @@ func nonce(c *gin.Context) {
 
 func verify(c *gin.Context) {
 	var requestBody verifyReq
-	// var err error
+	var err error
 	var message *siwe.Message
 	optionalDomain := "api.soularis.dev"
 
 	//session
 	session := sessions.Default(c)
 
-	if err := c.BindJSON(&requestBody); err != nil {
+	if err = c.BindJSON(&requestBody); err != nil {
 		errInfo := errorResp{Code: 123, Message: err.Error()}
 		c.JSON(400, gin.H{
 			"error": errInfo,
@@ -56,7 +53,7 @@ func verify(c *gin.Context) {
 		return
 	}
 
-	if message, err := siwe.ParseMessage(requestBody.Message); message == nil {
+	if message, err = siwe.ParseMessage(requestBody.Message); message == nil {
 		errInfo := errorResp{Code: 123, Message: err.Error()}
 		c.JSON(422, gin.H{
 			"error": errInfo,
@@ -66,7 +63,7 @@ func verify(c *gin.Context) {
 
 	// VERIFY
 	optionalNonce, _ := session.Get("nonce").(string)
-	_, err := message.Verify(requestBody.Signature, &optionalDomain, &optionalNonce, nil)
+	_, err = message.Verify(requestBody.Signature, &optionalDomain, &optionalNonce, nil)
 
 	if err != nil {
 		errInfo := errorResp{Code: 123, Message: err.Error()} // error code not determined
