@@ -88,7 +88,9 @@ func TestSIWE(t *testing.T) {
 	defer respBody.Close()
 	body, _ := io.ReadAll(respBody)
 
-	json.Unmarshal(body, &nonceData) // for w.Result().Body
+	if err := json.Unmarshal(body, &nonceData); err != nil {
+		panic(err)
+	}
 
 	//#3 MESSAGE STRUCT
 	testMessage, _ := siwe.InitMessage(
