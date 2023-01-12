@@ -1,5 +1,5 @@
-name: github actions for api test
-run-name: ${{ github.actor }} is testing out GitHub Actions for siwe api 🚀
+name: Go CI
+# run-name: ${{ github.actor }} is testing out GitHub Actions for siwe api 🚀
 on: [push, pull_request]
 
 jobs:
