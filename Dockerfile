@@ -1,4 +1,5 @@
-FROM golang:1.19
+FROM golang:1.19-alpine
+RUN apk add build-base
 
 WORKDIR /usr/src/app
 
